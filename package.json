@@ -1,0 +1,29 @@
+{
+  "name": "demo-template",
+  "version": "1.0.0",
+  "description": "Build and deploy an application to demos.mapbox.com",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "node lib/postconfig.js",
+    "start": "vite --open",
+    "build": "vite build --outDir build --base=/japan-optimization-v2",
+    "serve": "vite preview",
+    "postinstall": "node lib/postinstall.js"
+  },
+  "devDependencies": {
+    "vite": "^2.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapbox/demo-template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapbox/demo-template/issues"
+  },
+  "homepage": "https://github.com/mapbox/demo-template#readme",
+  "dependencies": {
+    "mapbox-gl": "^2.4.1"
+  }
+}

@@ -1,0 +1,15 @@
+version: v1
+publisher:
+  builds:
+    - filter: on-branch
+      name: publisher-branches
+      # This is where you customize your configuration.
+      config:
+        # Options: 8.11.4 (default), 6.11.1, 10.9.0.
+        # The build script in package.json that should be executed.
+        # Default: build.
+        npm_build_script: build
+        # The location where the build script puts the website files,
+        # which will be deployed.
+        # Default: _site.
+        site_build_dir: build
