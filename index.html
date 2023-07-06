@@ -1,0 +1,99 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <link href="./optimization-v2-playground.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="map" class="map"></div>
+    <div class="overlay-tab">
+        <div class="switch-field">
+            <input type="radio" id="radio-one" name="switch-one" value="1" checked onchange="toggleInMode()" />
+            <label for="radio-one">設定</label>
+            <input type="radio" id="radio-two" name="switch-one" value="2" onchange="toggleInMode()" />
+            <label for="radio-two">結果</label>
+        </div>
+    </div>
+    <div id="overlay" class="overlay">
+        <div id="inmode-contents">
+            <div class="overlay-line">・<div class="pickup">集荷マーカ</div>と<div class="dropoff">配達マーカ</div>を設定（地図上を右クリック）
+            </div>
+            <div class="overlay-line">・<div class="pickup">集荷マーカ</div>と<div class="dropoff">配達マーカ</div>を接続（地図上の各マーカを左クリック）
+            </div>
+            <div class="overlay-line">・配送要件を設定（地図上の接続線を左クリック）</div>
+            <div class="overlay-line">・配送機関の要件を設定（下記配送機関アイコンを左クリック）</div>
+            <div class="overlay-line">
+                <div id="vehicles" class="vehicles">
+                </div>
+                <img class="add" src="./assets/add.svg" onclick="addNewVehicle(event)" />
+            </div>
+            <div>
+                <div style="text-align: right;">
+                    <button class="modal-button" onclick="calculateSolution()">ルート計算</button>
+                </div>
+            </div>
+        </div>
+        <div id="outmode-contents" style="display: none;">
+            <div class="overlay-line">最適ルート表示中</div>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-button" style="background-color: red;" onclick="addTypeMarker('pickup')">集荷</button>
+            <button class="modal-button" style="background-color: green;" onclick="addTypeMarker('dropoff')">配達</button>
+        </div>
+    </div>
+    <div id="shipment-modal" class="shipment-modal">
+        <div class="modal-content">
+            集荷時間帯<input type="time" id="shipment-pickup-startime" /><input type="time" id="shipment-pickup-endtime" />
+            配達時間帯<input type="time" id="shipment-dropoff-startime" /><input type="time" id="shipment-dropoff-endtime" />
+            箱数<input type="number" id="shipment-item-count" />
+            荷積み時間（分）<input type="number" id="shipment-pickup-duration" />
+            荷下ろし時間（分）<input type="number" id="shipment-dropoff-duration" />
+            要件<select id="shipment-requirements">
+                <option value=""></option>
+                <option value="refrigeration">冷蔵</option>
+                <option value="freeze">冷凍</option>
+                <option value="breakable">割れ物注意</option>
+            </select>
+            <input type="hidden" id="shipment-id" />
+            <button class="modal-button" onclick="submitShipment()">決定</button>
+        </div>
+    </div>
+    <div id="vehicle-modal" class="vehicle-modal">
+        <div class="modal-content">
+            タイプ<select id="vehicle-type">
+                <option value="1">車両</option>
+                <option value="2">自転車</option>
+                <option value="3">徒歩</option>
+            </select>
+            始業点<select id="vehicle-startplace"></select>
+            終業点<select id="vehicle-endplace"></select>
+            始業時間<input type="time" id="vehicle-starttime" />
+            終業時間<input type="time" id="vehicle-endtime" />
+            積載可能箱数<input type="number" id="vehicle-item-count" />
+            積載機能<select id="vehicle-requirements">
+                <option value=""></option>
+                <option value="refrigeration">冷蔵</option>
+                <option value="freeze">冷凍</option>
+                <option value="breakable">割れ物注意</option>
+            </select>
+            <input type="hidden" id="target-vehicle-id" />
+            <div class="overlay-line">
+                <button id="vehicle-remove-button" class="modal-button" onclick="delVehicle()" style="display: none;">削除</button>
+                <button id="vehicle-commit-button" class="modal-button" onclick="appendVehicle()">決定</button>
+            </div>
+        </div>
+    </div>
+    <script src="./optimization-v2-playground.js" type="module"></script>
+</body>
+
+</html>
