@@ -1,6 +1,6 @@
 import { polyline } from "./polyline.js";
 
-mapboxgl.accessToken = '***REMOVED***';
+mapboxgl.accessToken = '%YOUR_TOKEN%';
 let lng = 139.62722;
 let lat = 35.45305;
 
