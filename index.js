@@ -1,7 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl'
 
-mapboxgl.accessToken = "***REMOVED***";
+mapboxgl.accessToken = "%Y0UR_TOKEN%";
 
 const map = new mapboxgl.Map({
   container: "map",
